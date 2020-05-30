@@ -1,0 +1,30 @@
+---
+- name: Add Elasticsearch apt-key
+  apt_key:
+   url: "https://packages.elastic.co/GPG-KEY-elasticsearch"
+   state: present
+- name: Add filebeat repository
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/7.x/apt stable main
+    state: present
+
+- name: Install filebeat package
+  apt:
+    name: filebeat
+    update_cache: yes
+
+- name: Create metricbeat configuration file
+  template:
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable the filebeat systemd service
+  systemd:
+    name: filebeat
+    enabled: yes
+    state: started
+    daemon_reload: yes
+

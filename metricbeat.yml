@@ -1,0 +1,7 @@
+- hosts: elk
+  remote_user: user
+  become: yes
+  become_user: root
+  roles:
+   - { role: metricbeat }
+   - { role: filebeat }

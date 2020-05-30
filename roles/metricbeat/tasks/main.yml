@@ -1,0 +1,30 @@
+---
+# tasks file for metricbeat
+- name: Add Elasticsearch apt-key
+  apt_key:
+   url: "https://packages.elastic.co/GPG-KEY-elasticsearch"
+   state: present
+- name: Add metricbeat repository
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/7.x/apt stable main
+    state: present
+
+- name: Install metricbeat package
+  apt:
+    name: metricbeat
+    update_cache: yes
+
+- name: Create metricbeat configuration file
+  template:
+    src: metricbeat.yml.j2
+    dest: /etc/metricbeat/metricbeat.yml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable the metricbeat systemd service
+  systemd:
+    name: metricbeat
+    enabled: yes
+    state: started
+    daemon_reload: yes
