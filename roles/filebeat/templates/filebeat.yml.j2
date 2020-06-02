@@ -1,3 +1,4 @@
+---
 filebeat.inputs:
 
 # Each - is an input. Most options can be set at the input level, so
@@ -13,9 +14,6 @@ filebeat.inputs:
   paths:
   # This is where you put stuff to be sent to logstash
     - /var/log/syslog
-    - /var/log/*/*.log
-    - /var/log/*.log
-    - /home/ubuntu/apache.log
 filebeat.config.modules:
   # Glob pattern for configuration loading
   path: ${path.config}/modules.d/*.yml
@@ -30,18 +28,10 @@ filebeat.config.modules:
 setup.template.settings:
   index.number_of_shards: 3
 
-setup.dashboards.enabled: true
-setup.dashboards.beat:
-
-
-
 output.logstash:
   # The Logstash hosts
-  hosts: ["http://localhost:{{ logstash_port }}"]
+  hosts: ["localhost:5044"]
   enabled: true
-  #### we use our generated certificates from ELK
-  
-
 processors:
   - add_host_metadata: ~
   - add_cloud_metadata: ~
